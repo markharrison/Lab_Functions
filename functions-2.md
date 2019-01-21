@@ -37,7 +37,9 @@ The Azure Functions project template in Visual Studio creates a project that can
 
 ```C#
 [FunctionName("Trigger")]
-public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+public static async Task<HttpResponseMessage> Run(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, 
+    TraceWriter log)
 {
     log.Info("C# HTTP trigger function processed a request.");
 
@@ -50,6 +52,28 @@ public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLeve
     return req.CreateResponse(HttpStatusCode.OK, strColors[rInt]);
 
 }
+```
+
+NOTE if using Functions V2 (.NET Core) then use the following code:
+
+```C#
+[FunctionName("Trigger")]
+public static async Task<IActionResult> Run(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+    ILogger log)
+{
+    log.LogInformation("C# HTTP trigger function processed a request.");
+
+    string[] strColors = { "blue", "lightblue", "darkblue" };
+    //  string[] strColors = { "green", "lightgreen", "darkgreen" };
+
+    Random r = new Random();
+    int rInt = r.Next(strColors.Length);
+
+    return (ActionResult)new OkObjectResult(strColors[rInt]);
+
+}
+
 ```
 
 ## Test Function locally
