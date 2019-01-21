@@ -44,6 +44,27 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
 }
 ```
 
+NOTE - if using Functions V2 (.NET Core) then use 
+
+```c#
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
+
+public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
+{
+    log.LogInformation("C# HTTP trigger function processed a request.");
+
+    string[] strColors = { "blue", "lightblue", "darkblue" };
+    //string[] strColors = { "green", "lightgreen", "darkgreen" };
+
+    Random r = new Random();
+    int rInt = r.Next(strColors.Length);
+
+    return  (ActionResult)new OkObjectResult(strColors[rInt]);
+ 
+}
+```
+
 ![](Images/FunHttpTriggerUrl.png)
 
 Cross-Origin Resource Sharing (CORS) allows JavaScript code running in a browser on an external host to interact with your backend.  Need to specify the origins that should be allowed.  We enable any browser to invoke the function by specifying a '*'.
